@@ -11,8 +11,28 @@ import '../styles/index.css'
 // components
 import Home from './components/Home';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+let minutes=0
+let hours=0
+let seconds=0;
+
+const root=ReactDOM.createRoot(document.getElementById('root'))
+
+const interval= setInterval(()=>{
+seconds++;
+  if(seconds>59){
+    seconds=0;
+    minutes++;
+  }
+  if(minutes>59){
+    minutes=0;
+    hours++
+  };
+
+  let data=[hours,minutes,seconds];
+
+root.render(
   <React.StrictMode>
-    <Home/>
+    <Home contador={data}/>
   </React.StrictMode>,
 )
+},1000)
