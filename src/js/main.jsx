@@ -11,28 +11,35 @@ import '../styles/index.css'
 // components
 import Home from './components/Home';
 
-let minutes=0
-let hours=0
-let seconds=0;
+// ❌ PROBLEMA CRÍTICO: Variables globales mutables (anti-patrón en React)
+// ✅ SOLUCIÓN: Usar useState dentro de un componente Counter
+let minutes = 0  // ⚠️ Agregar espacios alrededor de =
+let hours = 0
+let seconds = 0;
 
-const root=ReactDOM.createRoot(document.getElementById('root'))
+const root = ReactDOM.createRoot(document.getElementById('root'))  // ⚠️ Agregar espacios
 
-const interval= setInterval(()=>{
-seconds++;
-  if(seconds>59){
-    seconds=0;
-    minutes++;
-  }
-  if(minutes>59){
-    minutes=0;
-    hours++
-  };
+// ❌ PROBLEMA CRÍTICO: setInterval en scope global sin cleanup
+// ❌ Re-renderiza TODO el árbol de componentes cada segundo (performance)
+// ✅ SOLUCIÓN: Mover esta lógica a un componente con useState + useEffect
+const interval = setInterval(() => {  // ⚠️ Agregar espacios
+    seconds++;
+    if (seconds > 59) {  // ⚠️ Agregar espacio después de if y alrededor de >
+        seconds = 0;
+        minutes++;
+    }
+    if (minutes > 59) {
+        minutes = 0;
+        hours++
+    };
 
-  let data=[hours,minutes,seconds];
+    let data = [hours, minutes, seconds];
 
-root.render(
-  <React.StrictMode>
-    <Home contador={data}/>
-  </React.StrictMode>,
-)
-},1000)
+    // ❌ ANTI-PATRÓN: Llamar a root.render() repetidamente
+    // ✅ React debe manejar las actualizaciones automáticamente con useState
+    root.render(
+        <React.StrictMode>
+            <Home contador={data} />
+        </React.StrictMode>,
+    )
+}, 1000)
